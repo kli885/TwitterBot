@@ -1,14 +1,14 @@
-import schedule
+import schedule #download
 import time
 import random
 import os
-import sys
-from dotenv import load_dotenv
-import webbrowser
-import requests_oauthlib
-import re
-import time
-import tweepy
+import sys 
+from dotenv import load_dotenv #download
+import webbrowser #builtin
+import requests_oauthlib #download
+import time 
+import tweepy #download
+import json  #builtin
 
 def main():
 	load_dotenv("APIKEY.env")
@@ -21,6 +21,7 @@ def main():
 	base_authorization_url = 'https://api.twitter.com/oauth/authorize'
 	access_token_url = 'https://api.twitter.com/oauth/access_token'
 	authorization_url = oauth.authorization_url(base_authorization_url)
+
 	while True:
 		webbrowser.open(authorization_url)
 		user_url = input("Copy url down below after authenticating\n")
@@ -32,6 +33,7 @@ def main():
 			break
 		time.sleep(1)
 		os.system("clear")
+
 	response_oauth = oauth.parse_authorization_response(user_url)
 	info = oauth.fetch_access_token(access_token_url)
 	auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -43,7 +45,16 @@ def main():
 		time.sleep(1)
 
 def tweet(api):
-	public_tweets = api.update_status("Testing %d" % random.randint(1,100))
+	with open('tweets.json', 'r') as f:
+		all_message = f.readlines()
+		while True:
+			message = random.choice(all_message)
+			json_data = json.loads(message)
+			if 'text' in json_data:
+				status = json_data['text']
+				newstatus = status.replace("@","*")
+				break	
+		api.update_status(newstatus)
 main()
 
 
