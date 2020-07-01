@@ -8,6 +8,7 @@ import webbrowser
 import requests_oauthlib
 import re
 import time
+import tweepy
 
 def main():
 	load_dotenv("APIKEY.env")
@@ -18,6 +19,7 @@ def main():
 	oauth = requests_oauthlib.OAuth1Session(CONSUMER_KEY,CONSUMER_SECRET)
 	fetch_response = oauth.fetch_request_token(url)
 	base_authorization_url = 'https://api.twitter.com/oauth/authorize'
+	access_token_url = 'https://api.twitter.com/oauth/access_token'
 	authorization_url = oauth.authorization_url(base_authorization_url)
 	while True:
 		webbrowser.open(authorization_url)
@@ -30,7 +32,18 @@ def main():
 			break
 		time.sleep(1)
 		os.system("clear")
-	
+	response_oauth = oauth.parse_authorization_response(user_url)
+	info = oauth.fetch_access_token(access_token_url)
+	auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+	auth.set_access_token(info.get("oauth_token"), info.get("oauth_token_secret"))
+	api = tweepy.API(auth)
+	schedule.every(5).seconds.do(tweet,api=api)
+	while True:
+		schedule.run_pending()
+		time.sleep(1)
+
+def tweet(api):
+	public_tweets = api.update_status("Testing %d" % random.randint(1,100))
 main()
 
 
@@ -51,18 +64,7 @@ main()
 
 	#	ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
 	# ACCESS_TOKEN_SECRET = os.environ.get("ACCESS_TOKEN_SECRET")
-# auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-	# auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-	# api = tweepy.API(auth)
-	# public_tweets = api.update_status("Testing %d" % random.randint(1,100))
-# def my_time():
-# 	schedule.every(5).seconds.do(main)
-# 	while True:
-# 		schedule.run_pending()
-# 		time.sleep(1)
-
-# my_time()
 
 	# try:
 	# 	redirect_url = auth.get_authorization_url()
