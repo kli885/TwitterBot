@@ -2,3 +2,5 @@ pip install requests-oauthlib
 pip install tweepy
 pip install schedule
 pip install python-dotenv
+#Must include APIKEY.env containing consumer key and consumer secret key
+#Must include tweets.json containing tweets stored in json file
