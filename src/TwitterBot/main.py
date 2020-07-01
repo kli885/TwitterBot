@@ -45,7 +45,7 @@ def main():
 		time.sleep(1)
 
 def tweet(api):
-	with open('29.json', 'r') as f:
+	with open('tweets.json', 'r') as f:
 		all_message = f.readlines()
 		while True:
 			message = random.choice(all_message)
