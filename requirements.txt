@@ -1,6 +1,6 @@
-pip install requests-oauthlib
-pip install tweepy
-pip install schedule
-pip install python-dotenv
+requests-oauthlib==1.3.0
+tweepy==3.8.0
+schedule==0.6.0
+python-dotenv==0.13.0
 #Must include APIKEY.env containing consumer key and consumer secret key
 #Must include tweets.json containing tweets stored in json file
