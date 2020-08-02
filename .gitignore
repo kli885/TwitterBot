@@ -131,3 +131,4 @@ dmypy.json
 #database file
 tweets.json
 prunedLyrics.txt
+APIKEY.env
