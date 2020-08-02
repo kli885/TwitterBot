@@ -1,14 +1,13 @@
 import schedule #download
 import time
-import random
 import os
 import sys 
 from dotenv import load_dotenv #download
 import webbrowser #builtin
-import requests_oauthlib #download
-import time 
-import tweepy #download
-import json  #builtin
+import requests_oauthlib #API
+import tweepy #API
+from tweet import tweet 
+from markov_tweet import markov_tweet
 
 def main():
 	load_dotenv("APIKEY.env")
@@ -39,28 +38,26 @@ def main():
 	auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 	auth.set_access_token(info.get("oauth_token"), info.get("oauth_token_secret"))
 	api = tweepy.API(auth)
-	schedule.every(5).seconds.do(tweet,api=api)
+	format_continue = True
+	while format_continue is True:
+		tweet_format = input("Which tweet pattern would you like to use?\n1.Random line selection\n2.Markov Chain\n")
+		if tweet_format == "1":
+			print("Posting...")
+			schedule.every(5).seconds.do(tweet,api=api)
+			break
+		elif tweet_format == "2":
+			print("Posting...")
+			schedule.every(5).seconds.do(markov_tweet,api=api)
+			break
+		else:
+			print("Please enter a valid answer")
+			os.system("clear")
 	while True:
 		schedule.run_pending()
 		time.sleep(1)
-
-def tweet(api):
-	with open('tweets.json', 'r') as f:
-		all_message = f.readlines()
-		while True:
-			message = random.choice(all_message)
-			json_data = json.loads(message)
-			if 'text' in json_data:
-				status = json_data['text']
-				newstatus = status.replace("@","*")
-				break	
-		api.update_status(newstatus)
 main()
 
-
-
-
-#newer stuff
+#alternative approach
 	# consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
 	# client = oauth.Client(consumer)
 	# request_token_uri="https://api.twitter.com/oauth/request_token"
@@ -69,20 +66,6 @@ main()
 	# info = content.decode("utf-8")
 	# info_list = str.split(info,"&")
 	# authorization_url = "https://api.twitter.com/oauth/authorize?%s" % (info_list[0])
-
-#old stuff
-
-
-	#	ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
-	# ACCESS_TOKEN_SECRET = os.environ.get("ACCESS_TOKEN_SECRET")
-
-
-	# try:
-	# 	redirect_url = auth.get_authorization_url()
-	# except tweepy.TweepError:
-	# 	print('Error! Failed to get request token.')
-
-	# session.set('request_token', auth.request_token['oauth_token'])
 
 
 
