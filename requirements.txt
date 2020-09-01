@@ -1,6 +1,7 @@
-requests-oauthlib==1.3.0
-tweepy==3.8.0
 schedule==0.6.0
-python-dotenv==0.13.0
+tweepy==3.8.0
+requests_oauthlib==1.3.0
+python-dotenv==0.14.0
 #Must include APIKEY.env containing consumer key and consumer secret key
 #Must include tweets.json containing tweets stored in json file
+#Must include a database file to perform Markov operations on named prunedLyrics.txt
